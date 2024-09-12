@@ -19,7 +19,7 @@ const port = 3001;
 
 // CORS configuration
 app.use(cors({
-    origin: url,
+    origin: 'https://petershops.com',
     credentials: true,
 }));
 
