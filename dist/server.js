@@ -17,12 +17,11 @@ const googleLoginRoutes_1 = __importDefault(require("./routes/googleLoginRoutes"
 const uploadRoutes_1 = __importDefault(require("./productRoutes/uploadRoutes"));
 const getProductInfoRoutes_1 = __importDefault(require("./routes/getProductInfoRoutes"));
 const orderRoutes_1 = __importDefault(require("./routes/orderRoutes"));
-const type_1 = __importDefault(require("./types/type"));
 const app = (0, express_1.default)();
 const port = 3001;
 // CORS configuration
 app.use((0, cors_1.default)({
-    origin: type_1.default,
+    origin: 'https://petershops.com',
     credentials: true,
 }));
 // MongoDB connection

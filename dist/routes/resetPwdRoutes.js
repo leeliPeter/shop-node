@@ -58,7 +58,7 @@ router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const mailOptions = {
             from: 'no-reply@yourapp.com',
             to: email,
-            subject: 'Password Reset Request',
+            subject: `Password Reset Request`,
             html: `
               <p>Dear user,</p>
               <p>We received a request to reset the password associated with your account. Please click the link below to set a new password:</p>
