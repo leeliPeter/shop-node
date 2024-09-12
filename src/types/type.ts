@@ -73,5 +73,5 @@ export type UserInfo = {
     resetTokenExpiry?: number;
 };
 
-const url: string = 'http://localhost:3001';
+const url: string = 'https://petershops.com';
 export default url;
