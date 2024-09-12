@@ -53,14 +53,14 @@ router.post('/', async (req: Request, res: Response) => {
         });
 
         // Generate reset URL
-        const resetUrl = `https://petershops.com/reset-password?token=${resetToken}`;
+        const resetUrl = `${url}/reset-password?token=${resetToken}`;
 
 
         // Email options
         const mailOptions = {
             from: 'no-reply@yourapp.com',
             to: email,
-            subject: 'Password Reset Request',
+            subject: `Password Reset Request from ${url}`,
             html: `
               <p>Dear user,</p>
               <p>We received a request to reset the password associated with your account. Please click the link below to set a new password:</p>
