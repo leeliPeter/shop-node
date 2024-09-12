@@ -53,7 +53,7 @@ router.post('/', async (req: Request, res: Response) => {
         });
 
         // Generate reset URL
-        const resetUrl = `${url}/reset-password?token=${resetToken}`;
+        const resetUrl = `https://petershops.com/reset-password?token=${resetToken}`;
 
 
         // Email options
