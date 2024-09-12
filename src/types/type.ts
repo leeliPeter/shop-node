@@ -73,5 +73,5 @@ export type UserInfo = {
     resetTokenExpiry?: number;
 };
 
-const url: string = 'http://localhost:5173';
+const url: string = 'http://localhost:3001';
 export default url;
