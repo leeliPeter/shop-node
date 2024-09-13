@@ -17,11 +17,27 @@ import url  from './types/type';
 const app = express();
 const port = 3001;
 
-// CORS configuration
+
+const allowedOrigins = ['http://localhost:5173', url];
+
 app.use(cors({
-    origin: 'https://petershops.com',
+    origin: function (origin: string | undefined, callback) {
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true,
 }));
+
+
+
+// // CORS configuration
+// app.use(cors({
+//     origin: url,
+//     credentials: true,
+// }));
 
 // MongoDB connection
 const uri = "mongodb+srv://manager:12345678a@cluster0.63awn.mongodb.net/myShop?retryWrites=true&w=majority&appName=Cluster0";

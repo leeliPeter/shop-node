@@ -4,7 +4,6 @@ import HomeImageModel from '../schema/homeImageSchema'; // Adjust the path as ne
 
 const router = express.Router();
 
-
 // Route to get all products
 router.get('/products', async (req, res) => {
     console.log('Fetching products...'); // Debug log
@@ -41,6 +40,17 @@ router.get('/home-images', async (req, res) => {
         res.status(200).json(homeImages);
     } catch (error) {
         res.status(500).json({ message: 'Error fetching home images.', error });
+    }
+});
+
+// Route to get all phone home images
+router.get('/phone-home-images', async (req, res) => {
+    console.log("phone-home-images"); // Debug log
+    try {
+        const phoneHomeImages = await HomeImageModel.find(); // Fetch all phone home images from the database
+        res.status(200).json(phoneHomeImages);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching phone home images.', error });
     }
 });
 

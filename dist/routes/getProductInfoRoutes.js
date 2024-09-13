@@ -55,4 +55,15 @@ router.get('/home-images', (req, res) => __awaiter(void 0, void 0, void 0, funct
         res.status(500).json({ message: 'Error fetching home images.', error });
     }
 }));
+// Route to get all phone home images
+router.get('/phone-home-images', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("phone-home-images"); // Debug log
+    try {
+        const phoneHomeImages = yield homeImageSchema_1.default.find(); // Fetch all phone home images from the database
+        res.status(200).json(phoneHomeImages);
+    }
+    catch (error) {
+        res.status(500).json({ message: 'Error fetching phone home images.', error });
+    }
+}));
 exports.default = router;
