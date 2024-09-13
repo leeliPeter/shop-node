@@ -17,13 +17,26 @@ const googleLoginRoutes_1 = __importDefault(require("./routes/googleLoginRoutes"
 const uploadRoutes_1 = __importDefault(require("./productRoutes/uploadRoutes"));
 const getProductInfoRoutes_1 = __importDefault(require("./routes/getProductInfoRoutes"));
 const orderRoutes_1 = __importDefault(require("./routes/orderRoutes"));
+const type_1 = __importDefault(require("./types/type"));
 const app = (0, express_1.default)();
 const port = 3001;
-// CORS configuration
+const allowedOrigins = ['http://localhost:3001', type_1.default];
 app.use((0, cors_1.default)({
-    origin: 'https://petershops.com',
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        }
+        else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true,
 }));
+// // CORS configuration
+// app.use(cors({
+//     origin: url,
+//     credentials: true,
+// }));
 // MongoDB connection
 const uri = "mongodb+srv://manager:12345678a@cluster0.63awn.mongodb.net/myShop?retryWrites=true&w=majority&appName=Cluster0";
 mongoose_1.default.connect(uri)
