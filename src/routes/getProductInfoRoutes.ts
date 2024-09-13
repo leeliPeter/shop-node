@@ -1,6 +1,7 @@
 import express from 'express';
 import ProductModel from '../schema/productSchema'; // Adjust the path as necessary
 import HomeImageModel from '../schema/homeImageSchema'; // Adjust the path as necessary
+import PhoneHomeImageModel from '../schema/phoneHomeImageSchema';
 
 const router = express.Router();
 
@@ -47,7 +48,7 @@ router.get('/home-images', async (req, res) => {
 router.get('/phone-home-images', async (req, res) => {
     console.log("phone-home-images"); // Debug log
     try {
-        const phoneHomeImages = await HomeImageModel.find(); // Fetch all phone home images from the database
+        const phoneHomeImages = await PhoneHomeImageModel.find(); // Fetch all phone home images from the database
         res.status(200).json(phoneHomeImages);
     } catch (error) {
         res.status(500).json({ message: 'Error fetching phone home images.', error });

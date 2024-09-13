@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const productSchema_1 = __importDefault(require("../schema/productSchema")); // Adjust the path as necessary
 const homeImageSchema_1 = __importDefault(require("../schema/homeImageSchema")); // Adjust the path as necessary
+const phoneHomeImageSchema_1 = __importDefault(require("../schema/phoneHomeImageSchema"));
 const router = express_1.default.Router();
 // Route to get all products
 router.get('/products', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -59,7 +60,7 @@ router.get('/home-images', (req, res) => __awaiter(void 0, void 0, void 0, funct
 router.get('/phone-home-images', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("phone-home-images"); // Debug log
     try {
-        const phoneHomeImages = yield homeImageSchema_1.default.find(); // Fetch all phone home images from the database
+        const phoneHomeImages = yield phoneHomeImageSchema_1.default.find(); // Fetch all phone home images from the database
         res.status(200).json(phoneHomeImages);
     }
     catch (error) {
