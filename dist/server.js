@@ -20,7 +20,7 @@ const orderRoutes_1 = __importDefault(require("./routes/orderRoutes"));
 const type_1 = __importDefault(require("./types/type"));
 const app = (0, express_1.default)();
 const port = 3001;
-const allowedOrigins = ['http://localhost:3001', type_1.default];
+const allowedOrigins = ['http://localhost:5173', type_1.default];
 app.use((0, cors_1.default)({
     origin: function (origin, callback) {
         if (!origin || allowedOrigins.indexOf(origin) !== -1) {
