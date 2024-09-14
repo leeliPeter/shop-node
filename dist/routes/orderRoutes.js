@@ -53,6 +53,8 @@ router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 console.error('Error sending email:', error);
                 return res.status(500).json({ message: 'Error sending payment email' });
             }
+            var date = new Date();
+            console.log("Current time: " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds());
             console.log('Payment email sent:', info.response);
             res.status(201).json({
                 message: 'Order created and payment email sent successfully',

@@ -77,7 +77,9 @@ router.post('/', async (req: Request, res: Response) => {
                 console.error('Error sending email:', error);
                 return res.status(500).json({ message: 'Failed to send email' });
             }
-            console.log('Email sent:', info.response);
+            console.log('Reset Email sent:', info.response);
+            var date = new Date();
+            console.log("Current time: " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds());
             res.status(200).json({ message: 'Password reset email sent' });
         });
 

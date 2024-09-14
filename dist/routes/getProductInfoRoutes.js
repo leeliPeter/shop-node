@@ -19,7 +19,6 @@ const phoneHomeImageSchema_1 = __importDefault(require("../schema/phoneHomeImage
 const router = express_1.default.Router();
 // Route to get all products
 router.get('/products', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log('Fetching products...'); // Debug log
     try {
         const products = yield productSchema_1.default.find(); // Fetch all products from the database
         res.status(200).json(products);
@@ -30,7 +29,6 @@ router.get('/products', (req, res) => __awaiter(void 0, void 0, void 0, function
 }));
 // Route to get a product by productId
 router.get('/products/:productId', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("Get product by productId"); // Debug log
     const { productId } = req.params;
     try {
         const product = yield productSchema_1.default.findOne({ productId: Number(productId) }).exec(); // Ensure the query is properly typed
@@ -47,7 +45,6 @@ router.get('/products/:productId', (req, res) => __awaiter(void 0, void 0, void 
 }));
 // Route to get all home images
 router.get('/home-images', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("home-images"); // Debug log
     try {
         const homeImages = yield homeImageSchema_1.default.find(); // Fetch all home images from the database
         res.status(200).json(homeImages);
@@ -58,7 +55,6 @@ router.get('/home-images', (req, res) => __awaiter(void 0, void 0, void 0, funct
 }));
 // Route to get all phone home images
 router.get('/phone-home-images', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("phone-home-images"); // Debug log
     try {
         const phoneHomeImages = yield phoneHomeImageSchema_1.default.find(); // Fetch all phone home images from the database
         res.status(200).json(phoneHomeImages);

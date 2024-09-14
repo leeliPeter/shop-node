@@ -7,7 +7,6 @@ const router = express.Router();
 
 // Route to get all products
 router.get('/products', async (req, res) => {
-    console.log('Fetching products...'); // Debug log
     try {
         const products = await ProductModel.find(); // Fetch all products from the database
         res.status(200).json(products);
@@ -18,7 +17,6 @@ router.get('/products', async (req, res) => {
 
 // Route to get a product by productId
 router.get('/products/:productId', async (req, res) => {
-    console.log("Get product by productId"); // Debug log
     const { productId } = req.params;
 
     try {
@@ -35,7 +33,6 @@ router.get('/products/:productId', async (req, res) => {
 
 // Route to get all home images
 router.get('/home-images', async (req, res) => {
-    console.log("home-images"); // Debug log
     try {
         const homeImages = await HomeImageModel.find(); // Fetch all home images from the database
         res.status(200).json(homeImages);
@@ -46,7 +43,6 @@ router.get('/home-images', async (req, res) => {
 
 // Route to get all phone home images
 router.get('/phone-home-images', async (req, res) => {
-    console.log("phone-home-images"); // Debug log
     try {
         const phoneHomeImages = await PhoneHomeImageModel.find(); // Fetch all phone home images from the database
         res.status(200).json(phoneHomeImages);

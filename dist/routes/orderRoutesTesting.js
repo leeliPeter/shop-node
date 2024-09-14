@@ -17,7 +17,6 @@ const orderSchema_1 = require("../schema/orderSchema"); // Import the Mongoose m
 const router = express_1.default.Router();
 // POST /order - Create a new order
 router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log('order upload');
     try {
         const orderData = req.body;
         // Create a new order without generating orderId on the backend

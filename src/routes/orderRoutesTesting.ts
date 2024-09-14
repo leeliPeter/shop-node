@@ -5,7 +5,6 @@ const router = express.Router();
 
 // POST /order - Create a new order
 router.post('/', async (req: Request, res: Response) => {
-  console.log('order upload');
   try {
     const orderData = req.body;
 
