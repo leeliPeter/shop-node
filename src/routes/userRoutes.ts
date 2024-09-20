@@ -127,9 +127,13 @@ router.post('/logout', (req: Request, res: Response) => {
 // Route to get the current user info if session exists
 router.get('/current-user', (req: Request, res: Response) => {
     if (!req.session.user) {
+        var date = new Date();
+        console.log("Current time: " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds());
         console.log('No session found');
         return res.status(401).json({ message: 'Unauthorized' });
     }
+    var date = new Date();
+    console.log("Current time: " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds());
     console.log('Session found');
     console.log(req.session.user);
     res.json(req.session.user);
