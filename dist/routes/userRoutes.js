@@ -126,11 +126,13 @@ router.post('/logout', (req, res) => {
 router.get('/current-user', (req, res) => {
     if (!req.session.user) {
         var date = new Date();
+        console.log("Current date: " + date.getMonth() + "/" + date.getDate());
         console.log("Current time: " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds());
         console.log('No session found');
         return res.status(401).json({ message: 'Unauthorized' });
     }
     var date = new Date();
+    console.log("Current date: " + date.getMonth() + "/" + date.getDate());
     console.log("Current time: " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds());
     console.log('Session found');
     console.log(req.session.user);
