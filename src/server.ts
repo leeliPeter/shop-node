@@ -1,4 +1,5 @@
 import express from 'express';
+import { Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import session from 'express-session';
@@ -12,16 +13,15 @@ import googleLoginRoutes from './routes/googleLoginRoutes';
 import uploadRoutes from './productRoutes/uploadRoutes';
 import getProductInfoRoutes from './routes/getProductInfoRoutes';
 import orderRoutes from './routes/orderRoutes';
-import url  from './types/type';
+import url from './types/type';
 
 const app = express();
 const port = 3001;
 
-
 const allowedOrigins = ['http://localhost:5173', url];
 
 app.use(cors({
-    origin: function (origin: string | undefined, callback) {
+    origin: function (origin, callback) {
         if (!origin || allowedOrigins.indexOf(origin) !== -1) {
             callback(null, true);
         } else {
@@ -30,14 +30,6 @@ app.use(cors({
     },
     credentials: true,
 }));
-
-
-
-// // CORS configuration
-// app.use(cors({
-//     origin: url,
-//     credentials: true,
-// }));
 
 // MongoDB connection
 const uri = "mongodb+srv://manager:12345678a@cluster0.63awn.mongodb.net/myShop?retryWrites=true&w=majority&appName=Cluster0";
@@ -80,7 +72,23 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../react-dist/index.html'));
 });
 
+// Error handling middleware
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
+
 // Start the server
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
+
+// Handle process termination gracefully
+process.on('SIGINT', () => {
+    server.close(() => {
+        console.log('Server closed');
+        mongoose.connection.close(); // Close MongoDB connection
+        process.exit(0);
+    });
+});
+
