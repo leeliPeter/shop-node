@@ -32,11 +32,6 @@ app.use((0, cors_1.default)({
     },
     credentials: true,
 }));
-// // CORS configuration
-// app.use(cors({
-//     origin: url,
-//     credentials: true,
-// }));
 // MongoDB connection
 const uri = "mongodb+srv://manager:12345678a@cluster0.63awn.mongodb.net/myShop?retryWrites=true&w=majority&appName=Cluster0";
 mongoose_1.default.connect(uri)
@@ -71,7 +66,20 @@ app.use(express_1.default.static(path_1.default.join(__dirname, '../react-dist')
 app.get('*', (req, res) => {
     res.sendFile(path_1.default.join(__dirname, '../react-dist/index.html'));
 });
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
 // Start the server
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
+});
+// Handle process termination gracefully
+process.on('SIGINT', () => {
+    server.close(() => {
+        console.log('Server closed');
+        mongoose_1.default.connection.close(); // Close MongoDB connection
+        process.exit(0);
+    });
 });
