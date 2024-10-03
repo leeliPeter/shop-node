@@ -20,27 +20,30 @@ const port = 3001;
 
 const allowedOrigins = ['http://localhost:5173', url];
 
+// CORS setup
 app.use(cors({
     origin: function (origin, callback) {
         if (!origin || allowedOrigins.indexOf(origin) !== -1) {
             callback(null, true);
         } else {
-            callback(new Error('Not allowed by CORS'));
+            callback(new Error('CORS error: Not allowed by CORS'));
         }
     },
     credentials: true,
 }));
 
-// MongoDB connection
+// MongoDB connection with retry mechanism
 const uri = "mongodb+srv://manager:12345678a@cluster0.63awn.mongodb.net/myShop?retryWrites=true&w=majority&appName=Cluster0";
-
 mongoose.connect(uri)
     .then(() => console.log('Connected to MongoDB'))
-    .catch(error => console.error('Error connecting to MongoDB:', error));
+    .catch(error => {
+        console.error('Error connecting to MongoDB:', error);
+        setTimeout(() => mongoose.connect(uri), 5000);
+    });
 
 // Middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
 app.use(session({
     secret: 'yourSecretKey',
@@ -51,7 +54,7 @@ app.use(session({
         httpOnly: true,
         secure: false,
         sameSite: 'lax',
-        maxAge: 3600 * 1000,
+        maxAge: 3600 * 1000 * 12 * 30, // ~30 days
     }
 }));
 
@@ -74,8 +77,13 @@ app.get('*', (req, res) => {
 
 // Error handling middleware
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-    console.error(err.stack);
-    res.status(500).send('Something broke!');
+    if (err.code === 'ECONNRESET') {
+        console.error('Broken pipe or client connection reset');
+        res.status(500).send('Connection error');
+    } else {
+        console.error(err.stack);
+        res.status(500).send('Something broke!');
+    }
 });
 
 // Start the server
@@ -83,12 +91,25 @@ const server = app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
 
+// Increase server timeout
+server.timeout = 120000; // 2 minutes
+
 // Handle process termination gracefully
 process.on('SIGINT', () => {
+    console.log('SIGINT received: closing server gracefully');
+    
     server.close(() => {
         console.log('Server closed');
-        mongoose.connection.close(); // Close MongoDB connection
-        process.exit(0);
+        
+        mongoose.connection.close()
+            .then(() => {
+                console.log('MongoDB connection closed');
+                process.exit(0);  // Exit the process after the MongoDB connection is closed
+            })
+            .catch(err => {
+                console.error('Error while closing MongoDB connection:', err);
+                process.exit(1);  // Exit with an error code if MongoDB connection closing fails
+            });
     });
 });
 
