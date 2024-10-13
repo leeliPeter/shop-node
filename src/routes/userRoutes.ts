@@ -2,8 +2,6 @@ import express, { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { UserInfo } from '../schema/userInfo';
 import { DateTime } from 'luxon';
-import fs from 'fs';
-import path from 'path';
 
 
 const router = express.Router();
@@ -142,17 +140,7 @@ router.get('/current-user', (req: Request, res: Response) => {
     // Prepare the data to write
     const dataToWrite = `User location: ${userLocation}\nToronto local time: ${torontoTime.toLocaleString(DateTime.DATETIME_MED)}\n\n`;
     
-    // Create the path to vistordata.txt outside of shop-node
-    const filePath = path.join(__dirname, '..', 'vistordata.txt');
-
-    // Write data to vistordata.txt
-    fs.appendFile(filePath, dataToWrite, (err) => {
-        if (err) {
-            console.error('Error writing to file:', err);
-        } else {
-            console.log('Data written to vistordata.txt');
-        }
-    });
+    console.log(dataToWrite);
 
     // Check for user session
     if (!req.session.user) {
