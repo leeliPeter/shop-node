@@ -16,8 +16,6 @@ const express_1 = __importDefault(require("express"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const userInfo_1 = require("../schema/userInfo");
 const luxon_1 = require("luxon");
-const fs_1 = __importDefault(require("fs"));
-const path_1 = __importDefault(require("path"));
 const router = express_1.default.Router();
 // Route to handle the registration form submission
 router.post('/register', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -135,17 +133,7 @@ router.get('/current-user', (req, res) => {
     const torontoTime = nowUTC.setZone('America/Toronto');
     // Prepare the data to write
     const dataToWrite = `User location: ${userLocation}\nToronto local time: ${torontoTime.toLocaleString(luxon_1.DateTime.DATETIME_MED)}\n\n`;
-    // Create the path to vistordata.txt outside of shop-node
-    const filePath = path_1.default.join(__dirname, '..', 'vistordata.txt');
-    // Write data to vistordata.txt
-    fs_1.default.appendFile(filePath, dataToWrite, (err) => {
-        if (err) {
-            console.error('Error writing to file:', err);
-        }
-        else {
-            console.log('Data written to vistordata.txt');
-        }
-    });
+    console.log(dataToWrite);
     // Check for user session
     if (!req.session.user) {
         console.log("No session found");
