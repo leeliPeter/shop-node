@@ -16,6 +16,7 @@ const express_1 = __importDefault(require("express"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const userInfo_1 = require("../schema/userInfo");
 const luxon_1 = require("luxon");
+const geoip_lite_1 = __importDefault(require("geoip-lite"));
 const router = express_1.default.Router();
 // Route to handle the registration form submission
 router.post('/register', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -125,16 +126,14 @@ router.post('/logout', (req, res) => {
 });
 // Route to get the current user info if session exists
 router.get('/current-user', (req, res) => {
-    // Assuming location is sent in the query parameters
-    const userLocation = req.query.location || 'Location not provided';
-    // Get current date and time in UTC
+    // Get the IP address of the client; fallback to a default IP if not found
+    const ip = req.ip || '127.0.0.1'; // Use localhost as a fallback
+    const geo = geoip_lite_1.default.lookup(ip);
+    const userLocation = geo ? `${geo.city}, ${geo.country}` : 'Location not provided';
     const nowUTC = luxon_1.DateTime.utc();
-    // Convert to Toronto time (America/Toronto)
     const torontoTime = nowUTC.setZone('America/Toronto');
-    // Prepare the data to write
     const dataToWrite = `User location: ${userLocation}\nToronto local time: ${torontoTime.toLocaleString(luxon_1.DateTime.DATETIME_MED)}\n\n`;
     console.log(dataToWrite);
-    // Check for user session
     if (!req.session.user) {
         console.log("No session found");
         return res.status(401).json({ message: 'Unauthorized' });
