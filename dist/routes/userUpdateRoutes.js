@@ -40,8 +40,6 @@ router.put('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     // Exclude the password field from the update
     const { password } = updatedInfo, infoToUpdate = __rest(updatedInfo, ["password"]);
-    var date = new Date();
-    console.log("Current time: " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds());
     try {
         const user = yield userInfo_1.UserInfo.findOneAndUpdate({ userId }, { $set: infoToUpdate }, { new: true });
         if (!user) {

@@ -22,8 +22,6 @@ router.put('/', async (req: Request, res: Response) => {
     // Exclude the password field from the update
     const { password, ...infoToUpdate } = updatedInfo;
 
-    var date = new Date();
-    console.log("Current time: " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds());
 
     try {
         const user = await UserInfo.findOneAndUpdate(

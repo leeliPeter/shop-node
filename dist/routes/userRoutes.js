@@ -15,6 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const userInfo_1 = require("../schema/userInfo");
+const luxon_1 = require("luxon");
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
 const router = express_1.default.Router();
 // Route to handle the registration form submission
 router.post('/register', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -124,16 +127,30 @@ router.post('/logout', (req, res) => {
 });
 // Route to get the current user info if session exists
 router.get('/current-user', (req, res) => {
+    // Assuming location is sent in the query parameters
+    const userLocation = req.query.location || 'Location not provided';
+    // Get current date and time in UTC
+    const nowUTC = luxon_1.DateTime.utc();
+    // Convert to Toronto time (America/Toronto)
+    const torontoTime = nowUTC.setZone('America/Toronto');
+    // Prepare the data to write
+    const dataToWrite = `User location: ${userLocation}\nToronto local time: ${torontoTime.toLocaleString(luxon_1.DateTime.DATETIME_MED)}\n\n`;
+    // Create the path to vistordata.txt outside of shop-node
+    const filePath = path_1.default.join(__dirname, '..', 'vistordata.txt');
+    // Write data to vistordata.txt
+    fs_1.default.appendFile(filePath, dataToWrite, (err) => {
+        if (err) {
+            console.error('Error writing to file:', err);
+        }
+        else {
+            console.log('Data written to vistordata.txt');
+        }
+    });
+    // Check for user session
     if (!req.session.user) {
-        var date = new Date();
-        console.log("Current date: " + date.getMonth() + "/" + date.getDate());
-        console.log("Current time: " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds());
-        console.log('No session found');
+        console.log("No session found");
         return res.status(401).json({ message: 'Unauthorized' });
     }
-    var date = new Date();
-    console.log("Current date: " + date.getMonth() + "/" + date.getDate());
-    console.log("Current time: " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds());
     console.log('Session found');
     console.log(req.session.user);
     res.json(req.session.user);

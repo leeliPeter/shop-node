@@ -1,6 +1,10 @@
 import express, { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { UserInfo } from '../schema/userInfo';
+import { DateTime } from 'luxon';
+import fs from 'fs';
+import path from 'path';
+
 
 const router = express.Router();
 
@@ -126,16 +130,36 @@ router.post('/logout', (req: Request, res: Response) => {
 
 // Route to get the current user info if session exists
 router.get('/current-user', (req: Request, res: Response) => {
+    // Assuming location is sent in the query parameters
+    const userLocation = req.query.location || 'Location not provided';
+    
+    // Get current date and time in UTC
+    const nowUTC = DateTime.utc();
+    
+    // Convert to Toronto time (America/Toronto)
+    const torontoTime = nowUTC.setZone('America/Toronto');
+    
+    // Prepare the data to write
+    const dataToWrite = `User location: ${userLocation}\nToronto local time: ${torontoTime.toLocaleString(DateTime.DATETIME_MED)}\n\n`;
+    
+    // Create the path to vistordata.txt outside of shop-node
+    const filePath = path.join(__dirname, '..', 'vistordata.txt');
+
+    // Write data to vistordata.txt
+    fs.appendFile(filePath, dataToWrite, (err) => {
+        if (err) {
+            console.error('Error writing to file:', err);
+        } else {
+            console.log('Data written to vistordata.txt');
+        }
+    });
+
+    // Check for user session
     if (!req.session.user) {
-        var date = new Date();
-        console.log("Current date: " + date.getMonth() + "/" + date.getDate());
-        console.log("Current time: " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds());
-        console.log('No session found');
+        console.log("No session found");
         return res.status(401).json({ message: 'Unauthorized' });
     }
-    var date = new Date();
-    console.log("Current date: " + date.getMonth() + "/" + date.getDate());
-    console.log("Current time: " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds());
+
     console.log('Session found');
     console.log(req.session.user);
     res.json(req.session.user);
