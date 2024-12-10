@@ -2,7 +2,7 @@
   "name": "shop-nodets",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.ts",
   "scripts": {
     "postinstall": "npm uninstall bcrypt && npm install bcrypt",
     "test": "echo \"Error: no test specified\" && exit 1"
